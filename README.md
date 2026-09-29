@@ -1,245 +1,102 @@
-# 📝 Aplikasi To-Do Sederhana dengan React
+# React Todo App
 
-Panduan langkah demi langkah untuk membuat aplikasi **To-Do List** sederhana menggunakan **React** dan **Vite**. Cocok untuk pemula yang baru belajar React.
+Aplikasi To-Do List sederhana yang dibuat dengan React dan Vite. Proyek ini dibuat sebagai latihan untuk memahami dasar-dasar React, seperti komponen, state, dan penanganan event.
 
-## ✨ Fitur
+## Fitur
 
 - Menambah tugas baru
-- Menandai tugas selesai / belum selesai
+- Menandai tugas sebagai selesai atau belum selesai
 - Menghapus tugas
 
-## 🧰 Prasyarat
+## Teknologi
 
-Pastikan sudah terpasang:
+- [React](https://react.dev/)
+- [Vite](https://vite.dev/)
 
-- [Node.js](https://nodejs.org/) versi 18 atau lebih baru
-- npm (sudah termasuk dalam Node.js)
-- Code editor, misalnya [VS Code](https://code.visualstudio.com/)
+## Prasyarat
 
-Cek versi dengan perintah:
+Pastikan Node.js versi 18 atau lebih baru sudah terpasang di komputer Anda.
 
 ```bash
 node -v
-npm -v
 ```
 
-## 🚀 Membuat Proyek
+## Instalasi
 
-1. Buat proyek baru menggunakan Vite:
+1. Clone repository ini:
 
-   ```bash
-   npm create vite@latest todo-app -- --template react
-   ```
+```bash
+   git clone https://github.com/username/react-todo-app.git
+```
 
-2. Masuk ke folder proyek dan pasang dependensi:
+2. Masuk ke folder proyek:
 
-   ```bash
-   cd todo-app
+```bash
+   cd react-todo-app
+```
+
+3. Pasang dependensi:
+
+```bash
    npm install
-   ```
+```
 
-3. Jalankan server pengembangan:
+4. Jalankan aplikasi:
 
-   ```bash
+```bash
    npm run dev
-   ```
+```
 
-4. Buka alamat yang muncul di terminal (biasanya `http://localhost:5173`).
+5. Buka `http://localhost:5173` di browser.
 
-## 📁 Struktur Folder
+## Perintah yang Tersedia
+
+| Perintah          | Fungsi                                  |
+| ----------------- | --------------------------------------- |
+| `npm run dev`     | Menjalankan server pengembangan         |
+| `npm run build`   | Membuat versi produksi di folder `dist` |
+| `npm run preview` | Melihat hasil build secara lokal        |
+
+## Struktur Proyek
 
 ```
-todo-app/
+react-todo-app/
 ├── public/
 ├── src/
-│   ├── App.jsx        # Komponen utama
-│   ├── App.css        # Gaya untuk App
-│   ├── main.jsx       # Titik masuk aplikasi
-│   └── index.css
+│   ├── App.jsx       # Komponen utama dan logika aplikasi
+│   ├── App.css       # Gaya untuk komponen App
+│   ├── main.jsx      # Titik masuk aplikasi
+│   └── index.css     # Gaya global
 ├── index.html
 ├── package.json
 └── vite.config.js
 ```
 
-## 💻 Menulis Kode
+## Cara Kerja
 
-### 1. Ganti isi `src/App.jsx`
+Aplikasi menyimpan daftar tugas dalam state menggunakan `useState`. Setiap tugas berbentuk objek dengan tiga properti:
 
-```jsx
-import { useState } from "react";
-import "./App.css";
-
-function App() {
-  const [tasks, setTasks] = useState([]);
-  const [input, setInput] = useState("");
-
-  const addTask = () => {
-    if (input.trim() === "") return;
-    setTasks([...tasks, { id: Date.now(), text: input, done: false }]);
-    setInput("");
-  };
-
-  const toggleTask = (id) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, done: !task.done } : task
-      )
-    );
-  };
-
-  const deleteTask = (id) => {
-    setTasks(tasks.filter((task) => task.id !== id));
-  };
-
-  return (
-    <div className="app">
-      <h1>To-Do List</h1>
-
-      <div className="input-group">
-        <input
-          type="text"
-          value={input}
-          placeholder="Tulis tugas baru..."
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && addTask()}
-        />
-        <button onClick={addTask}>Tambah</button>
-      </div>
-
-      <ul>
-        {tasks.map((task) => (
-          <li key={task.id} className={task.done ? "done" : ""}>
-            <span onClick={() => toggleTask(task.id)}>{task.text}</span>
-            <button onClick={() => deleteTask(task.id)}>✕</button>
-          </li>
-        ))}
-      </ul>
-
-      {tasks.length === 0 && <p className="empty">Belum ada tugas.</p>}
-    </div>
-  );
-}
-
-export default App;
+```js
+{ id: 1700000000000, text: "Belajar React", done: false }
 ```
 
-### 2. Ganti isi `src/App.css`
+Tiga fungsi utama mengelola daftar tersebut:
 
-```css
-.app {
-  max-width: 420px;
-  margin: 40px auto;
-  padding: 24px;
-  border-radius: 12px;
-  background: #f5f5f5;
-  color: #222;
-  font-family: system-ui, sans-serif;
-}
+- `addTask` menambahkan tugas baru ke daftar.
+- `toggleTask` mengubah status selesai sebuah tugas.
+- `deleteTask` menghapus tugas dari daftar.
 
-.input-group {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 16px;
-}
+## Rencana Pengembangan
 
-.input-group input {
-  flex: 1;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
+- [ ] Menyimpan data ke `localStorage`
+- [ ] Fitur edit tugas
+- [ ] Filter tugas (semua, selesai, belum selesai)
+- [ ] Memecah kode menjadi komponen yang lebih kecil
 
-button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 6px;
-  background: #4f46e5;
-  color: white;
-  cursor: pointer;
-}
+## Kontribusi
 
-ul {
-  list-style: none;
-  padding: 0;
-}
+Saran dan perbaikan sangat diterima. Silakan buka *issue* atau kirim *pull request*.
 
-li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #ddd;
-}
+## Lisensi
 
-li span {
-  cursor: pointer;
-}
-
-li.done span {
-  text-decoration: line-through;
-  color: #888;
-}
-
-.empty {
-  text-align: center;
-  color: #888;
-}
-```
-
-### 3. Bersihkan `src/index.css`
-
-Hapus isinya atau sisakan reset sederhana agar tampilan tidak bentrok:
-
-```css
-body {
-  margin: 0;
-  background: #e5e7eb;
-}
-```
-
-## 🧠 Konsep React yang Dipelajari
-
-| Konsep | Penjelasan |
-| --- | --- |
-| **Komponen** | `App` adalah fungsi yang mengembalikan tampilan (JSX) |
-| **State (`useState`)** | Menyimpan data yang bisa berubah, seperti daftar tugas |
-| **Event handler** | `onClick`, `onChange`, dan `onKeyDown` untuk merespons aksi pengguna |
-| **Rendering list** | `tasks.map()` dengan `key` unik untuk menampilkan daftar |
-| **Conditional rendering** | `&&` untuk menampilkan pesan saat daftar kosong |
-
-## 📦 Build untuk Produksi
-
-```bash
-npm run build
-```
-
-Hasil build ada di folder `dist/`. Untuk mencobanya secara lokal:
-
-```bash
-npm run preview
-```
-
-## 🌐 Deploy (Opsional)
-
-Anda bisa mengunggah folder `dist/` ke layanan gratis seperti:
-
-- [Netlify](https://www.netlify.com/)
-- [Vercel](https://vercel.com/)
-- [GitHub Pages](https://pages.github.com/)
-
-## 🔧 Ide Pengembangan Lanjutan
-
-- Simpan data ke `localStorage` agar tidak hilang saat halaman di-refresh
-- Tambahkan fitur edit tugas
-- Tambahkan filter (semua / selesai / belum selesai)
-- Pisahkan kode menjadi komponen kecil (`TaskItem`, `TaskForm`)
-- Coba tambahkan TypeScript atau Tailwind CSS
-
-## 📚 Referensi
-
-- [Dokumentasi React](https://react.dev/)
-- [Dokumentasi Vite](https://vite.dev/)
-
-## 📄 Lisensi
-
-Bebas digunakan untuk belajar. Silakan modifikasi sesuai kebutuhan.
+Proyek ini menggunakan lisensi [MIT](LICENSE).
